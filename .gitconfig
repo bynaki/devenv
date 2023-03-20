@@ -1,0 +1,15 @@
+[user]
+        name = bynaki
+        email = bynaki@icloud.com
+[color]
+        ui = auto
+[core]
+        editor = nvim
+[pull]
+        rebase = true
+[init]
+        defaultBranch = main
+[push]
+        recurseSubmodules = on-demand
+[ghq]
+        root = ~/ghq
