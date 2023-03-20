@@ -1,1 +1,0 @@
-/home/naki/.config/fish/config.fish
