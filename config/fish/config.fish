@@ -9,13 +9,10 @@ set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx XDG_STATE_HOME $HOME/.local/state
 
 # devenv project path
-set -gx DEVENV $HOME/projects/devenv
+set -gx DEVENV $HOME/devenv
 
 # user fish functions path
 set -g fish_function_path $fish_function_path $DEVENV/config/fish/functions
-
-command -qv nvim && alias vim nvim
-alias tmux "tmux -2"
 
 # settings for each os
 switch (uname)
@@ -26,6 +23,9 @@ switch (uname)
   case '*'
     source $DEVENV/config/fish/config-windows.fish
 end
+
+command -qv nvim && alias vim nvim
+alias tmux "tmux -2"
 
 # call fish key binding function
 fish_user_key_bindings

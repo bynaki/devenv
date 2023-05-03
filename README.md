@@ -3,7 +3,9 @@
 
 ## Essential
 
-### Docker Run (on M1(arm) 이지만 amd64 아키텍쳐로)
+### Docker Run
+> on M1(arm) 이지만 amd64 아키텍쳐로
+>
 
 ```bash
 docker run -it --name "devenv-arch" --platform linux/amd64 archlinux
@@ -66,7 +68,7 @@ pacman -S base-devel
 
 ```bash
 # devenv path
-export DEVENV="$HOME/projects/devenv"
+export DEVENV="$HOME/devenv"
 
 # XDG Base Directory
 # https://wiki.archlinux.org/index.php/XDG_Base_Directory
@@ -89,7 +91,7 @@ git clone https://github.com/bynaki/devenv.git $DEVENV
 ### Configure Git
 
 ```bash
-ln -s $DEVENV/gitconfig ~/.gitconfig
+ln -s $DEVENV/.gitconfig ~/.gitconfig
 ```
 
 ### Install yay - https://github.com/Jguer/yay
@@ -133,7 +135,6 @@ sudo pacman -S fish
     ```bash
     chsh -s (which fish)
     ```
-    
 
 ### Install Fisher - https://github.com/jorgebucaran/fisher
 
@@ -221,7 +222,7 @@ sudo pacman -Syu peco
 ### Configure Fish
 
 ```bash
-ln -s $DEVENV/config/fish/config.fish $XDG_CONFIG_HOME/fish/config.fish
+ln -sf $DEVENV/config/fish/config.fish $XDG_CONFIG_HOME/fish/config.fish
 ```
 
 ## Tmux

@@ -5,7 +5,9 @@ local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
 if not cmp_nvim_lsp_status then return end
 
 local protocol = require('vim.lsp.protocol')
+local buf = require('vim.lsp.buf')
 local keymap = vim.keymap
+
 
 local on_attach = function(client, bufnr)
   -- enable completion triggered by <c-x><c-o>
@@ -16,7 +18,11 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd('bufWritePre', {
       group = vim.api.nvim_create_augroup('Format', { clear = true }),
       buffer = bufnr,
-      callback = function() vim.lsp.buf.formatting_seq_sync() end
+      callback = function()
+        if buf.formatting_seq_sync then
+          return buf.formatting_seq_sync()
+        end
+      end
     })
   end
 

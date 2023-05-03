@@ -1,0 +1,21 @@
+{
+    "name": "naki-theme",
+    "displayName": "naki-theme",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.52.0"
+    },
+    "categories": [
+        "Themes"
+    ],
+    "contributes": {
+        "themes": [
+            {
+                "label": "naki01",
+                "uiTheme": "vs-dark",
+                "path": "./themes/naki01-color-theme.json"
+            }
+        ]
+    }
+}
