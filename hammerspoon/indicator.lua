@@ -19,7 +19,7 @@ local Indicator = {}
 Indicator = {
   enable = function(self)
     hs.fnutils.each(Indicator._indicators, function(indi)
-      indi:desable()
+      indi:disable()
     end)
     hs.fnutils.each(hs.screen.allScreens(), function(scr)
       local frame = scr:fullFrame()
@@ -29,7 +29,7 @@ Indicator = {
     end)
   end,
 
-  desable = function (self)
+  disable = function (self)
     hs.fnutils.each(self.boxes, function(box)
       if box ~= nil then
         box:delete()
