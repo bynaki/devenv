@@ -312,6 +312,39 @@ end
 
 
 
+-- Naver Dictionary
+--
+do
+  local url = 'https://en.dict.naver.com/#/search?query='
+  local naver = hs.webview.new({
+    x = 0,
+    y = 10,
+    w = 1020,
+    h = 1020,
+  })
+  naver:windowStyle('resizable')
+  naver:allowTextEntry(true)
+
+  cmd:bind({}, 'n', function ()
+    print(hs.webview.windowMasks)
+    if naver:isVisible() then
+      naver:hide()
+      return
+    end
+    local pasted = hs.pasteboard.readString()
+    if pasted then
+      if string.len(pasted) > 30 then
+        naver:show()
+        return
+      end
+      pasted = string.gsub(pasted, ' ', "%%20")
+      naver:url(url .. pasted)
+    end
+    naver:show()
+  end)
+end
+
+
 local vimMod = Commander.new('Red')
 
 -- Vim Mode --
