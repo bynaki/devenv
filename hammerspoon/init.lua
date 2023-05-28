@@ -115,7 +115,7 @@ do
     frame.w = screen.w
     frame.h = screen.h
     win:setFrame(frame)
-    return true
+    return false
   end
 
   -- 윈도우창 크기 조절
@@ -204,7 +204,12 @@ do
     local remapper = FRemap.new()
     remapper:remap('capslock', 'f14')
     remapper:remap('escape', '`')
+    remapper:remap('rctl', 'f15')
     remapper:register()
+    -- tmux key
+    hs.hotkey.bind({}, 'f15', function()
+      hs.eventtap.keyStroke({'ctrl'}, 'b')
+    end)
   end
 
   local chooser = hs.chooser.new(function(choice)
@@ -316,6 +321,7 @@ end
 --
 do
   local url = 'https://en.dict.naver.com/#/search?query='
+  local blinkUrl = 'https://en.dict.naver.com'
   local naver = hs.webview.new({
     x = 0,
     y = 10,
@@ -400,4 +406,30 @@ do
 end
 
 
-trigger.bind(',', ',', cmd)
+trigger.bind(',', ',', function()
+  cmd:enable()
+end)
+
+
+do
+  local vim = {
+    {
+      text = 'vim: show definition, references -gf',
+      subText = 'show definition, references',
+      shortcut = {{}, '', 'gf'},
+    }, {
+      text = 'vim: got to declaration -gD',
+      subText = 'got to declaration',
+      shortcut = {{}, '', 'gD'},
+    }, {
+      text = 'vim: see definition and make edits in window -gd',
+      subText = 'see definition and make edits in window',
+      shortcut = {{}, '', 'gd'},
+    },
+  }
+  local shortcut = hs.chooser.new(function(choice)
+    if not choice then
+      return
+    end
+  end)
+end

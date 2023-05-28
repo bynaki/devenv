@@ -55,6 +55,7 @@ opt.iskeyword:append("-") -- consider string-string as whole word
 -- backup
 opt.backup = false
 opt.backupskip = { '/tmp/*', '/private/tmp/*' }
+opt.swapfile = false
 
 opt.shell = 'fish'
 opt.inccommand = 'split'

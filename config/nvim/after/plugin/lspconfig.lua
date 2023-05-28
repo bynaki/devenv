@@ -67,6 +67,7 @@ nvim_lsp.flow.setup {
   capabilities = capabilities
 }
 
+-- lua
 nvim_lsp.lua_ls.setup {
   on_attach = on_attach,
   settings = {
@@ -83,6 +84,7 @@ nvim_lsp.lua_ls.setup {
   capabilities = capabilities
 }
 
+-- typescript
 nvim_lsp.tsserver.setup {
   on_attach = on_attach,
   filetypes = { 'javascript', 'typescript', 'typescriptreact', 'typescript.tsx' },
@@ -91,7 +93,11 @@ nvim_lsp.tsserver.setup {
   capabilities = capabilities
 }
 
+-- tailwindcss
 nvim_lsp.tailwindcss.setup {}
+
+-- python
+nvim_lsp.pyright.setup{}
 
 -- showing the inline diagnostics automatically in the hover window
 -- vim.o.updatetime = 250

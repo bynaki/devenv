@@ -80,6 +80,8 @@ _event = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
 end)
 _event:start()
 
+
+
 local Commander = {}
 
 function Commander.new(color)
@@ -126,11 +128,12 @@ local trigger = {
   _binds = {}
 }
 
-function trigger.bind(oneKey, twoKey, commander)
+-- triger:bind()
+function trigger.bind(oneKey, twoKey, callback)
   if not trigger._binds[oneKey] then
     trigger._binds[oneKey] = {}
   end
-  trigger._binds[oneKey][twoKey] = commander
+  trigger._binds[oneKey][twoKey] = callback
 end
 
 
@@ -138,14 +141,17 @@ end
 local oneKey = nil
 
 _task1 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
-  local key = evt:getCharacters()
-  if trigger._binds[key] then
+  local flags = evt:getFlags()
+  if not flags:containExactly({}) then
+    return false
+  end
+  local char = evt:getCharacters()
+  if trigger._binds[char] then
     oneKey = {
-      key = key,
-      binds = trigger._binds[key],
+      key = char,
+      binds = trigger._binds[char],
       timer = hs.timer.doAfter(1, function ()
-        print('timer: ', key)
-        hs.eventtap.keyStrokes('a' .. key)
+        hs.eventtap.keyStrokes('a' .. char)
         _task2:stop()
         oneKey = nil
         _task1:start()
@@ -159,21 +165,32 @@ _task1 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
 end)
 _task1:start()
 
+
+
 _task2 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   _task2:stop()
   oneKey.timer:stop()
-  local key = evt:getCharacters()
+  local code = evt:getKeyCode()
+  local key = hs.keycodes.map[code]
+  if key == 'escape' or key == 'f14' then
+    hs.eventtap.keyStroke({}, oneKey.key)
+    hs.eventtap.keyStroke({}, 'escape')
+    oneKey = nil
+    _task1:start()
+    return true
+  end
+  local char = evt:getCharacters()
   -- print('task2: ', key)
-  if not oneKey.binds[key] then
-    keyStrokes(oneKey.key .. key, function()
+  local cb = oneKey.binds[char]
+  if not cb then
+    keyStrokes(oneKey.key .. char, function()
       oneKey = nil
       _task1:start()
     end)
     return true
   end
-  local cmd = oneKey.binds[key]
   oneKey = nil
-  cmd:enable()
+  cb()
   return true
 end)
 

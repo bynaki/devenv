@@ -16,3 +16,4 @@ end
 if is_wsl then
   require('naki.wsl')
 end
+
