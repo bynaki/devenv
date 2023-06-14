@@ -139,7 +139,6 @@ end
 
 
 local oneKey = nil
-
 _task1 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   local flags = evt:getFlags()
   if not flags:containExactly({}) then
@@ -191,9 +190,162 @@ _task2 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   end
   oneKey = nil
   cb()
+  _task1:start()
   return true
 end)
 
+
+local function readKeys(keys)
+  local pattern1 = '^!(<.->)(.*)'
+  local ext1, ext2 = string.match(keys, pattern1)
+  if ext1 then
+    local pattern = '<([^<>]+)>'
+    local extracted = {}
+    for match in ext1:gmatch(pattern) do
+      for word in match:gmatch("[^+]+") do
+        table.insert(extracted, word:lower())
+      end
+    end
+    local modifiers = {}
+    for i = 1, #extracted - 1 do
+      table.insert(modifiers, extracted[i])
+    end
+    return {
+      prefix = '!',
+      string = keys,
+      modifiers = modifiers,
+      key = extracted[#extracted],
+      strokes = ext2,
+    }
+  end
+  local pattern2 = '^!(.+)'
+  local ext3 = string.match(keys, pattern2)
+  if ext3 then
+    return {
+      prefix = '!',
+      string = keys,
+      modifiers = nil,
+      key = nil,
+      strokes = ext3,
+    }
+  end
+  local pattern3 = '^@(.+)'
+  local ext4 = string.match(keys, pattern3)
+  if ext4 then
+    return {
+      prefix = '@',
+      string = keys,
+      modifiers = nil,
+      key = nil,
+      strokes = ext4,
+    }
+  end
+  return nil
+end
+
+
+local vim_leader = {
+  modifiers = {},
+  chars = 'space',
+}
+local tmux_leader = {
+  modifiers = {'ctrl'},
+  chars = 'b',
+}
+
+local function classifyStroke(stroke)
+  if stroke == '<vim_leader>' then
+    return vim_leader
+  end
+  if stroke == '<tmux_leader>' then
+    return tmux_leader
+  end
+  local pattern = '<([^<>]+)>'
+  local extracted = {}
+  -- for match in strokes:gmatch(pattern) do
+  for match in string.gmatch(stroke, pattern) do
+    -- for word in match:gmatch("[^+]+") do
+    for word in string.gmatch(match, '[^+]+') do
+      table.insert(extracted, word:lower())
+    end
+  end
+  if #extracted == 0 then
+    return {
+      chars = stroke,
+    }
+  end
+  local modifiers = {}
+  for i = 1, #extracted - 1 do
+    table.insert(modifiers, extracted[i])
+  end
+  local chars = extracted[#extracted]
+  return {
+    modifiers = modifiers,
+    chars = chars,
+  }
+end
+
+
+local function readStrokes(strokes, tasks)
+  tasks = tasks or {}
+  if #strokes == 0 then
+    return tasks
+  end
+  local pattern = '(<[^<>]+>)'
+  local ss, ee, str = strokes:find(pattern)
+  if not ss then
+    table.insert(tasks, strokes)
+    return tasks
+  end
+  if ss == 1 then
+    table.insert(tasks, str)
+    return readStrokes(string.sub(strokes, ee + 1), tasks)
+  end
+  table.insert(tasks, string.sub(strokes, 1, ss - 1))
+  return readStrokes(string.sub(strokes, ss), tasks)
+end
+
+
+local function splitSentence(str)
+  local sentences = {}
+  for token in string.gmatch(str, "[^\n]+") do
+    table.insert(sentences, token)
+  end
+  return sentences
+end
+
+
+local past = nil
+
+local function snippet()
+  local pasted = hs.pasteboard.getContents()
+  if not pasted then
+    if past then
+      pasted = past
+    else
+      return
+    end
+  end
+  if string.sub(pasted, 1, 1) ~= '@' then
+    if past then
+      pasted = past
+    else
+      return
+    end
+  end
+  pasted = splitSentence(pasted)[1]
+  past = pasted
+  local ss = string.sub(pasted, 2)
+  local tasks = readStrokes(ss)
+  for _, t in ipairs(tasks) do
+    local stroke = classifyStroke(t)
+    if stroke.modifiers then
+      hs.eventtap.keyStroke(stroke.modifiers, stroke.chars)
+    else
+      hs.eventtap.keyStrokes(stroke.chars)
+    end
+  end
+end
 
 
 return {
@@ -201,4 +353,5 @@ return {
   Commander = Commander,
   keyStroke = keyStroke,
   keyStrokes = keyStrokes,
+  snippet = snippet,
 }

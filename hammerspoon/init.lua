@@ -1,6 +1,7 @@
 local cc = require('commander')
 local trigger = cc.trigger
 local Commander = cc.Commander
+local snippet = cc.snippet
 
 local cmd = Commander.new('Green')
 
@@ -11,6 +12,14 @@ local cmd = Commander.new('Green')
 do
   hs.hotkey.bind({'ctrl', 'option', 'cmd'}, 'r', hs.reload)
   cmd:bind({}, 'r', hs.reload)
+end
+
+
+-- Toggle Hammerspoon Console --
+--
+do
+  hs.hotkey.bind({'ctrl', 'option', 'cmd'}, 'c', hs.toggleConsole)
+  cmd:bind({}, 'c', hs.toggleConsole)
 end
 
 
@@ -411,25 +420,4 @@ trigger.bind(',', ',', function()
 end)
 
 
-do
-  local vim = {
-    {
-      text = 'vim: show definition, references -gf',
-      subText = 'show definition, references',
-      shortcut = {{}, '', 'gf'},
-    }, {
-      text = 'vim: got to declaration -gD',
-      subText = 'got to declaration',
-      shortcut = {{}, '', 'gD'},
-    }, {
-      text = 'vim: see definition and make edits in window -gd',
-      subText = 'see definition and make edits in window',
-      shortcut = {{}, '', 'gd'},
-    },
-  }
-  local shortcut = hs.chooser.new(function(choice)
-    if not choice then
-      return
-    end
-  end)
-end
+trigger.bind(',', 'm', snippet)

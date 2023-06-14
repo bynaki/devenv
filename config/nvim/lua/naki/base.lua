@@ -7,7 +7,7 @@ vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
 
 -- line numbers
-opt.relativenumber = true -- show relative line numbers
+-- opt.relativenumber = true -- show relative line numbers
 opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
 
 -- tabs & indentation
