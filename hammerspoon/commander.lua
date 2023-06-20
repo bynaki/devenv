@@ -248,17 +248,17 @@ local vim_leader = {
   modifiers = {},
   chars = 'space',
 }
-local tmux_leader = {
+local tmux_prefix = {
   modifiers = {'ctrl'},
   chars = 'b',
 }
 
 local function classifyStroke(stroke)
-  if stroke == '<vim_leader>' then
+  if stroke == '<vim_leader>' or stroke == '<leader>' then
     return vim_leader
   end
-  if stroke == '<tmux_leader>' then
-    return tmux_leader
+  if stroke == '<tmux_prefix>' or stroke == '<prefix>' then
+    return tmux_prefix
   end
   local pattern = '<([^<>]+)>'
   local extracted = {}
@@ -337,14 +337,33 @@ local function snippet()
   past = pasted
   local ss = string.sub(pasted, 2)
   local tasks = readStrokes(ss)
-  for _, t in ipairs(tasks) do
-    local stroke = classifyStroke(t)
+  local idx = 0
+  local timer
+  timer = hs.timer.new(0.1, function()
+    idx = idx + 1
+    if idx > #tasks then
+      timer:stop()
+      return
+    end
+    print(tasks[idx])
+    local stroke = classifyStroke(tasks[idx])
     if stroke.modifiers then
       hs.eventtap.keyStroke(stroke.modifiers, stroke.chars)
     else
       hs.eventtap.keyStrokes(stroke.chars)
     end
-  end
+  end)
+  timer:start()
+  -- for _, t in ipairs(tasks) do
+  --   local stroke = classifyStroke(t)
+  --   if stroke.modifiers then
+  --     -- hs.eventtap.keyStroke(stroke.modifiers, stroke.chars)
+  --     keyStroke(stroke.modifiers, stroke.chars)
+  --   else
+  --     -- hs.eventtap.keyStrokes(stroke.chars)
+  --     keyStrokes(stroke.chars)
+  --   end
+  -- end
 end
 
 

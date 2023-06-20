@@ -255,7 +255,7 @@ window:
   padding:
     x: 5
     y: 5
-  # decorations: none
+  decorations: none
 
 
 # Configuration for Alacritty, the GPU enhanced terminal emulator.
