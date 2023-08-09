@@ -165,6 +165,7 @@ do
   end
   -- hs.hotkey.bind({'shift'}, 'space', changeInput)
   hs.hotkey.bind({}, 'f13', changeInput)
+  trigger.bind(';', 'j', changeInput)
 end
 
 
@@ -415,9 +416,9 @@ do
 end
 
 
-trigger.bind(',', ',', function()
+trigger.bind(';', ';', function()
   cmd:enable()
 end)
 
 
-trigger.bind(',', 'm', snippet)
+trigger.bind(';', 's', snippet)

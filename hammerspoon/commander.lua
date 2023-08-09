@@ -59,8 +59,8 @@ _event = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
     enabledCmd:disable()
     return true
   end
-  if enabledCmd.binds[key] then
-    local list = enabledCmd.binds[key]
+  local list = enabledCmd.binds[key]
+  if list then
     for i = 1, #list do
       if flags:containExactly(list[i].modifiers) then
         local e = KeyEvent.new(evt)
@@ -81,6 +81,25 @@ end)
 _event:start()
 
 
+local function equalModifiers(mod1, mod2)
+  if #mod1 ~= #mod2 then
+    return false
+  end
+  for i = 1, #mod1 do
+    local be = false
+    for j = 1, #mod2 do
+      if mod1[i] == mod2[j] then
+        be = true
+        break
+      end
+    end
+    if be == false then
+      return false
+    end
+  end
+  return true
+end
+
 
 local Commander = {}
 
@@ -97,11 +116,13 @@ function Commander:bind(modifiers, key, callback)
   if not self.binds[key] then
     self.binds[key] = {}
   end
+  -- todo: list
   table.insert(self.binds[key], {
     modifiers = modifiers,
     callback = callback,
   })
 end
+
 function Commander:enable()
   if enabledCmd and enabledCmd == self then
     return
@@ -144,13 +165,15 @@ _task1 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   if not flags:containExactly({}) then
     return false
   end
-  local char = evt:getCharacters()
-  if trigger._binds[char] then
+  -- local key = evt:getCharacters()
+  local code = evt:getKeyCode()
+  local key = hs.keycodes.map[code]
+  if trigger._binds[key] then
     oneKey = {
-      key = char,
-      binds = trigger._binds[char],
+      key = key,
+      binds = trigger._binds[key],
       timer = hs.timer.doAfter(1, function ()
-        hs.eventtap.keyStrokes('a' .. char)
+        hs.eventtap.keyStrokes('a' .. evt:getCharacters())
         _task2:stop()
         oneKey = nil
         _task1:start()
@@ -178,11 +201,9 @@ _task2 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
     _task1:start()
     return true
   end
-  local char = evt:getCharacters()
-  -- print('task2: ', key)
-  local cb = oneKey.binds[char]
+  local cb = oneKey.binds[key]
   if not cb then
-    keyStrokes(oneKey.key .. char, function()
+    keyStrokes(oneKey.key .. evt:getCharacters(), function()
       oneKey = nil
       _task1:start()
     end)
@@ -193,55 +214,6 @@ _task2 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   _task1:start()
   return true
 end)
-
-
-local function readKeys(keys)
-  local pattern1 = '^!(<.->)(.*)'
-  local ext1, ext2 = string.match(keys, pattern1)
-  if ext1 then
-    local pattern = '<([^<>]+)>'
-    local extracted = {}
-    for match in ext1:gmatch(pattern) do
-      for word in match:gmatch("[^+]+") do
-        table.insert(extracted, word:lower())
-      end
-    end
-    local modifiers = {}
-    for i = 1, #extracted - 1 do
-      table.insert(modifiers, extracted[i])
-    end
-    return {
-      prefix = '!',
-      string = keys,
-      modifiers = modifiers,
-      key = extracted[#extracted],
-      strokes = ext2,
-    }
-  end
-  local pattern2 = '^!(.+)'
-  local ext3 = string.match(keys, pattern2)
-  if ext3 then
-    return {
-      prefix = '!',
-      string = keys,
-      modifiers = nil,
-      key = nil,
-      strokes = ext3,
-    }
-  end
-  local pattern3 = '^@(.+)'
-  local ext4 = string.match(keys, pattern3)
-  if ext4 then
-    return {
-      prefix = '@',
-      string = keys,
-      modifiers = nil,
-      key = nil,
-      strokes = ext4,
-    }
-  end
-  return nil
-end
 
 
 local vim_leader = {
