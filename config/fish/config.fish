@@ -31,7 +31,9 @@ alias tmux "tmux -2"
 fish_user_key_bindings
 
 cd ~
-nvm use # must be `.nvmrc`
+if test -f $XDG_CONFIG_HOME/fish/completions/nvm.fish
+  nvm use # must be `.nvmrc`
+end
 clear
 
 # >>> conda initialize >>>
