@@ -31,10 +31,13 @@ alias tmux "tmux -2"
 fish_user_key_bindings
 
 cd ~
+# use node.js
 if test -f $XDG_CONFIG_HOME/fish/completions/nvm.fish
   nvm use # must be `.nvmrc`
 end
 clear
+# run neofetch
+command -qv neofetch && neofetch
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
