@@ -28,7 +28,7 @@ end
 --
 local prevWin = nil
 do
-  hs.hotkey.bind({'cmd'}, 'return', function()
+  hs.hotkey.bind({'cmd'}, ';', function()
     local front = hs.application.frontmostApplication()
     print(front:name())
     if front:name() == 'Alacritty' then
