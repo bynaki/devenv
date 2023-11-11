@@ -1,0 +1,8 @@
+# Static IP & Wake on Lan
+Interface=enp6s0
+Connection=ethernet
+IP=static
+Address=('192.168.45.11/24')
+Gateway=('192.168.45.1')
+DNS=('8.8.8.8' '8.8.4.4')
+ExecUpPost='/usr/bin/ethtool -s enp6s0 wol g'
