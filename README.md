@@ -16,3 +16,5 @@
 5. [Configure Neovim](https://github.com/bynaki/docs/blob/main/development-environment/configure-neovim.md)
 
 6. [Install Docker on ArchLinux](https://github.com/bynaki/docs/blob/main/development-environment/install-docker-on-archlinux.md)
+
+6. [Install Python with Anaconda](https://github.com/bynaki/docs/blob/main/development-environment/install-python-anaconda.md)
