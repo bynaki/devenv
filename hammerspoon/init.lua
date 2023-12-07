@@ -127,12 +127,46 @@ do
     return false
   end
 
+  -- for record 16:10 
+  local function moveToLeftForScreenshot()
+    local win = hs.window.focusedWindow()
+    local frame = win:frame()
+    local screen = win:screen():frame()
+    local full = win:screen():fullFrame()
+    frame.x = screen.x
+    frame.y = screen.y
+    frame.w = math.floor(full.h * 1.6)
+    frame.h = screen.h
+    win:setFrame(frame)
+    return false
+  end
+
+  -- for record 16:10 
+  local function moveToRightForScreenshot()
+    local win = hs.window.focusedWindow()
+    local full = win:screen():fullFrame()
+    local screen = win:screen():frame()
+    local space = math.floor(full.h * 1.6)
+    if screen.w - space < 100 then
+      return false
+    end
+    local frame = win:frame()
+    frame.x = screen.x + space
+    frame.y = screen.y
+    frame.w = screen.w - space
+    frame.h = screen.h
+    win:setFrame(frame)
+    return false
+  end
+
   -- 윈도우창 크기 조절
   cmd:bind({'cmd'}, 'h', moveToLeft)
   cmd:bind({'cmd'}, 'l', moveToRight)
   cmd:bind({'cmd'}, 'k', moveToTop)
   cmd:bind({'cmd'}, 'j', moveToBottom)
   cmd:bind({'cmd'}, 'm', maxWindow)
+  cmd:bind({'ctrl'}, 'h', moveToLeftForScreenshot)
+  cmd:bind({'ctrl'}, 'l', moveToRightForScreenshot)
 end
 
 
