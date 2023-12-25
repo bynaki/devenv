@@ -30,7 +30,6 @@ local prevWin = nil
 do
   hs.hotkey.bind({'cmd'}, ';', function()
     local front = hs.application.frontmostApplication()
-    print(front:name())
     if front:name() == 'Alacritty' then
       if prevWin ~= nil then
         prevWin:focus()
@@ -227,7 +226,18 @@ do
   local function layoutApple() -- Remapping Keyboard Layout: Apple
     local FRemap = require('foundation_remapping')
     local remapper = FRemap.new()
-    remapper:remap('rcmd', 'f13')
+    -- remapper:remap('rcmd', 'f13')
+    remapper:remap('capslock', 'f14')
+    remapper:register()
+  end
+
+  local function layoutWindows() -- Remapping Keyboard Layout: WindowsKeys 
+    local FRemap = require('foundation_remapping')
+    local remapper = FRemap.new()
+    remapper:remap('lcmd', 'lalt')
+    remapper:remap('lalt', 'lcmd')
+    remapper:remap('rctl', 'ralt')
+    -- remapper:remap('ralt', 'f13')
     remapper:remap('capslock', 'f14')
     remapper:register()
   end
@@ -238,7 +248,7 @@ do
     remapper:remap('lcmd', 'lalt')
     remapper:remap('lalt', 'lcmd')
     remapper:remap('rctl', 'ralt')
-    remapper:remap('ralt', 'f13')
+    -- remapper:remap('ralt', 'f13')
     remapper:remap('capslock', 'f14')
     remapper:register()
   end
@@ -263,6 +273,9 @@ do
     if choice.text == 'Keyboard Layout: Apple' then
       layoutApple()
       hs.alert.show(choice.text)
+    elseif choice.text == 'Keyboard Layout: Windows' then
+      layoutWindows()
+      hs.alert.show(choice.text)
     elseif choice.text == 'Keyboard Layout: 68Keys' then
       layout68Keys()
       hs.alert.show(choice.text)
@@ -282,6 +295,10 @@ do
       subText = 'Apple Keyboard Layout'
     })
     table.insert(list, {
+      text = 'Keyboard Layout: Windows',
+      subText = 'Windows Keyboard Layout'
+    })
+    table.insert(list, {
       text = 'Keyboard Layout: 68Keys',
       subText = '68 Keys Keyboard Layout'
     })
@@ -294,7 +311,7 @@ do
   end
 
   cmd:bind({}, 'o', openLayoutChooser)
-  layoutAlice80() -- default apple keyboard layout
+  layoutWindows() -- default keyboard layout
 end
 
 

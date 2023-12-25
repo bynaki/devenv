@@ -43,6 +43,7 @@ end
 function KeyEvent:keyStroke(modifiers, key)
   self._evt:setFlags(modifiers)
   self._evt:setKeyCode(hs.keycodes.map[key])
+  self._evt:post(hs.application.frontmostApplication())
   self.block = false
 end
 
