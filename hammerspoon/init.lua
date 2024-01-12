@@ -250,6 +250,7 @@ do
     remapper:remap('rctl', 'ralt')
     -- remapper:remap('ralt', 'f13')
     remapper:remap('capslock', 'f14')
+    remapper:remap('escape', '`')
     remapper:register()
   end
 
