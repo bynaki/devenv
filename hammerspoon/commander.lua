@@ -49,6 +49,10 @@ function KeyEvent:keyStroke(modifiers, key)
   self.block = true
 end
 
+function KeyEvent:post(focused)
+  self._evt:post(focused)
+end
+
 local enabledCmd = nil
 
 _event = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
@@ -58,7 +62,7 @@ _event = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   local code = evt:getKeyCode()
   local key = hs.keycodes.map[code]
   local flags = evt:getFlags()
-  if key == 'escape' or key == 'f14' then
+  if key == 'escape' then
     enabledCmd:disable()
     return true
   end
@@ -197,7 +201,7 @@ _task2 = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   oneKey.timer:stop()
   local code = evt:getKeyCode()
   local key = hs.keycodes.map[code]
-  if key == 'escape' or key == 'f14' then
+  if key == 'escape' then
     hs.eventtap.keyStroke({}, oneKey.key)
     hs.eventtap.keyStroke({}, 'escape')
     oneKey = nil
@@ -345,6 +349,7 @@ end
 return {
   trigger = trigger,
   Commander = Commander,
+  KeyEvent = KeyEvent,
   keyStroke = keyStroke,
   keyStrokes = keyStrokes,
   snippet = snippet,
