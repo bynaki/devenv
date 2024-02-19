@@ -62,8 +62,8 @@ _rctrl_evt = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function (e
   if key == 'rightalt' then
     if flags.alt == true then
       changeInput()
+      return true
     end
-    return true
   end
   if key ~= 'rightctrl' then
     return false
