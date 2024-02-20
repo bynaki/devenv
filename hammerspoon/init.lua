@@ -215,6 +215,20 @@ do
     return true
   end)
 
+  -- Keyboard-driven expose
+  --
+  -- default windowfilter
+  local expose = hs.expose.new(nil, {showThumbnail=true})
+  custom:bind({'ctrl'}, ';', function (evt)
+    expose:toggleShow()
+    return true
+  end)
+  -- Active application
+  local expose_app = hs.expose.new(nil, {onlyActiveApplication=true})
+  custom:bind({'ctrl', 'shift'}, ';', function ()
+    expose_app:toggleShow()
+    return true
+  end)
 end
 
 -- Keyboard Layouts --
