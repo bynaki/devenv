@@ -231,6 +231,60 @@ do
   end)
 end
 
+
+-- Cheatsheet --
+--
+do
+  local v = hs.webview.new()
+  v:shadow(true)
+  v:bringToFront()
+
+  local function toggleCheatsheet(imgPath)
+    if v:isVisible() then
+      v:hide()
+      return
+    end
+    local imgObj = hs.image.imageFromPath(imgPath)
+    if not imgObj then
+      print("not be image")
+      return
+    end
+    local win = hs.window.focusedWindow()
+    local screen = win:screen():frame()
+    local size = imgObj:size()
+    if size.w > screen.w then
+      imgObj = imgObj:setSize({w = screen.w, h = 5000})
+      size = imgObj:size()
+    end
+    local img = imgObj:encodeAsURLString()
+    local f = io.open("./template.html", 'r')
+    if not f then
+      print("not be template")
+      return
+    end
+    local template = f:read("*a")
+    f:close()
+    local html = string.format(template, img)
+    local w = size.w
+    local h = math.min(size.h, screen.h)
+    local x = (screen.w / 2) - (w / 2)
+    local y = (screen.h / 2) - (h / 2)
+    v:frame({
+      x = x,
+      y = y,
+      w = w,
+      h = h,
+    })
+    v:html(html)
+    v:show()
+  end
+
+  custom:bind({'ctrl'}, 'l', function ()
+    toggleCheatsheet("./imgs/keyboard-layers.png")
+  end)
+end
+
+
 -- Keyboard Layouts --
 --
 do
