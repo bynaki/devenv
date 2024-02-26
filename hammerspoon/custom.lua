@@ -24,7 +24,6 @@ _custom_evt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   local key = hs.keycodes.map[code]
   local flags = evt:getFlags()
   withKey = key
-  print(key)
   local list = custom.binds[key]
   if list then
     for i = 1, #list do
@@ -62,7 +61,7 @@ _rctrl_evt = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function (e
   if key == 'rightalt' then
     if flags.alt == true then
       changeInput()
-      return true
+      return false
     end
   end
   if key ~= 'rightctrl' then

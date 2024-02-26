@@ -215,6 +215,7 @@ do
     return true
   end)
 
+
   -- Keyboard-driven expose
   --
   -- default windowfilter
@@ -229,12 +230,10 @@ do
     expose_app:toggleShow()
     return true
   end)
-end
 
 
--- Cheatsheet --
---
-do
+  -- Cheatsheet --
+  --
   local v = hs.webview.new()
   v:shadow(true)
   v:bringToFront()
@@ -280,7 +279,13 @@ do
   end
 
   custom:bind({'ctrl'}, 'l', function ()
-    toggleCheatsheet("./imgs/keyboard-layers.png")
+    toggleCheatsheet("./assets/keyboard-layers.png")
+    return true
+  end)
+
+  custom:bind({'ctrl'}, 'v', function ()
+    toggleCheatsheet("./assets/vim-cheatsheet.png")
+    return true
   end)
 end
 
