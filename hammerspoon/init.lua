@@ -215,6 +215,14 @@ do
     return true
   end)
 
+  -- left swap
+  -- custom:bind({'ctrl'}, 'h', function (evt)
+  --   -- evt:keyStroke({'ctrl'}, 'left')
+  --   print('hello')
+  --   hs.eventtap.keyStroke({'ctrl'}, 'left')
+  --   return false
+  -- end)
+
 
   -- Keyboard-driven expose
   --
@@ -278,12 +286,12 @@ do
     v:show()
   end
 
-  custom:bind({'ctrl'}, 'l', function ()
+  custom:bind({'ctrl'}, 'd', function ()
     toggleCheatsheet("./assets/keyboard-layers.png")
     return true
   end)
 
-  custom:bind({'ctrl'}, 'v', function ()
+  custom:bind({'ctrl'}, 's', function ()
     toggleCheatsheet("./assets/vim-cheatsheet.png")
     return true
   end)
