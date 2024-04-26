@@ -31,7 +31,7 @@ if status --is-login
 # call fish key binding function
   fish_user_key_bindings
 
-  cd ~
+  # cd ~
 # use node.js
   if test -f $XDG_CONFIG_HOME/fish/completions/nvm.fish
     nvm use # must be `.nvmrc`
