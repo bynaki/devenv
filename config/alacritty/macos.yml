@@ -1,20 +1,34 @@
 # User Configure
 
 font:
-  size: 20
+  size: 22
   normal:
-    family: JetBrainsMono Nerd Font
+    family: SauceCodePro Nerd Font Mono
     style: Medium
   bold:
-    family: JetBrainsMono Nerd Font
+    family: SauceCodePro Nerd Font Mono
     style: Bold
   italic:
-    family: JetBrainsMono Nerd Font
+    family: SauceCodePro Nerd Font Mono
     style: Italic
   bold_italic:
-    family: JetBrainsMono Nerd Font
+    family: SauceCodePro Nerd Font Mono
     style: Bold Italic
 
+  # size: 20
+  # normal:
+  #   family: JetBrainsMono Nerd Font
+  #   style: Medium
+  # bold:
+  #   family: JetBrainsMono Nerd Font
+  #   style: Bold
+  # italic:
+  #   family: JetBrainsMono Nerd Font
+  #   style: Italic
+  # bold_italic:
+  #   family: JetBrainsMono Nerd Font
+  #   style: Bold Italic
+  #
   #  size: 20
   #  normal:
   #    family: Office Code Pro
