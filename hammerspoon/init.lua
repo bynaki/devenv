@@ -3,6 +3,7 @@ local trigger = cc.trigger
 local Commander = cc.Commander
 local snippet = cc.snippet
 local custom = require('custom')
+require('layer')
 
 local cmd = Commander.new('Green')
 
