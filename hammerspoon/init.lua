@@ -1,19 +1,144 @@
-local cc = require('commander')
-local trigger = cc.trigger
-local Commander = cc.Commander
-local snippet = cc.snippet
-local custom = require('custom')
-require('layer')
+local layer = require('layer')
+local KeyboardLayer = layer.KeyboardLayer
+local FlickFlag = layer.FlickFlag
+local HoldFlag = layer.HoldFlag
 
-local cmd = Commander.new('Green')
 
+-- Customize Esc Key & Custom Key
+-- Esc키 눌렀을때 강제로 영문키로 변경, Capslock off for Vim
+--
+local inputEng = 'com.apple.keylayout.ABC'
+local function escapeWithChangedInput()
+  local input_source = hs.keycodes.currentSourceID()
+  if not (input_source == inputEng) then
+      hs.keycodes.currentSourceID(inputEng)
+  end
+  hs.hid.capslock.set(false)
+  hs.eventtap.keyStroke({}, 'escape')
+end
+
+-- Change Input Source :: 한영키 지정 --
+--
+local inputSource = {
+    english = "com.apple.keylayout.ABC",
+    korean = "com.apple.inputmethod.Korean.2SetKorean",
+}
+local function changeInput()
+  local current = hs.keycodes.currentSourceID()
+  local nextInput = nil
+  if current == inputSource.english then
+    nextInput = inputSource.korean
+  else
+    nextInput = inputSource.english
+  end
+  hs.keycodes.currentSourceID(nextInput)
+end
+
+_TestEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
+  local code = evt:getKeyCode()
+  local key = hs.keycodes.map[code]
+  local flags = evt:getFlags()
+  print('key:', key, 'alt:', flags.alt, 'cmd:', flags.cmd, 'ctrl:', flags.ctrl, 'shift:', flags.shift)
+  print('-------------------------------------')
+end)
+
+local layer01 = KeyboardLayer.new()
+layer01:bind('y', '^')
+layer01:bind('u', '&')
+layer01:bind('i', '*')
+layer01:bind('o', '(')
+layer01:bind('p', ')')
+layer01:bind('[', 'delete')
+layer01:bind('h', 'left')
+layer01:bind('j', 'down')
+layer01:bind('k', 'up')
+layer01:bind('l', 'right')
+layer01:bind(';', '=')
+layer01:bind("'", 'return')
+layer01:bind('n', '}')
+layer01:bind('m', ']')
+layer01:bind(',', '+')
+layer01:bind('.', '-')
+layer01:bind('/', '_')
+layer01:bind('left', 'up')
+HoldFlag.bind('rightctrl', layer01, escapeWithChangedInput)
+
+local layer02 = KeyboardLayer.new()
+layer02:bind('tab', '`')
+layer02:bind('q', '!')
+layer02:bind('w', '@')
+layer02:bind('e', '#')
+layer02:bind('r', '$')
+layer02:bind('t', '%')
+layer02:bind('a', 'forwarddelete')
+layer02:bind('s', 'home')
+layer02:bind('d', 'pageup')
+layer02:bind('f', 'pagedown')
+layer02:bind('g', 'end')
+layer02:bind('z', '~')
+layer02:bind('x', '\\')
+layer02:bind('c', '|')
+layer02:bind('v', '[')
+layer02:bind('b', '{')
+HoldFlag.bind('rightalt', layer02, changeInput)
+
+local layer03 = KeyboardLayer.new()
+HoldFlag.bind('rightcmd', layer03, 'return')
+layer03:bind('z', '0')
+layer03:bind('x', '1')
+layer03:bind('c', '2')
+layer03:bind('v', '3')
+layer03:bind('s', '4')
+layer03:bind('d', '5')
+layer03:bind('f', '6')
+layer03:bind('w', '7')
+layer03:bind('e', '8')
+layer03:bind('r', '9')
+layer03:bind('a', '=')
+layer03:bind('q', '+')
+layer03:bind('tab', '/')
+layer03:bind('b', '.')
+layer03:bind('g', '-')
+layer03:bind('t', '*')
+layer03:bind('m', 'f1')
+layer03:bind(',', 'f2')
+layer03:bind('.', 'f3')
+layer03:bind('j', 'f4')
+layer03:bind('k', 'f5')
+layer03:bind('l', 'f6')
+layer03:bind('u', 'f7')
+layer03:bind('i', 'f8')
+layer03:bind('o', 'f9')
+layer03:bind('/', 'f10')
+layer03:bind("'", 'f11')
+layer03:bind("p", 'f12')
+layer03:bind('n', 'f13')
+layer03:bind('h', 'f14')
+layer03:bind('y', 'f15')
+
+local layer04 = KeyboardLayer.new()
+layer04:bind('t', function ()
+  if not _TestEvt:isEnabled() then
+    _TestEvt:start()
+  else
+    _TestEvt:stop()
+  end
+end)
+layer04:bind('b', function ()
+  hs.eventtap.keyStroke({'ctrl'}, 'escape')
+end)
+FlickFlag.bind('cmd', layer04)
+
+FlickFlag.bind('ctrl', nil, function()
+  hs.eventtap.keyStroke({'ctrl'}, 'b')
+end)
 
 
 -- Reload Hammerspoon --
 --
 do
   hs.hotkey.bind({'ctrl', 'option', 'cmd'}, 'r', hs.reload)
-  cmd:bind({}, 'r', hs.reload)
+  layer04:bind('r', hs.reload)
 end
 
 
@@ -21,7 +146,7 @@ end
 --
 do
   hs.hotkey.bind({'ctrl', 'option', 'cmd'}, 'c', hs.toggleConsole)
-  cmd:bind({}, 'c', hs.toggleConsole)
+  layer04:bind('c', hs.toggleConsole)
 end
 
 
@@ -29,7 +154,7 @@ end
 --
 local prevWin = nil
 do
-  hs.hotkey.bind({'cmd'}, ';', function()
+  layer04:bind(';', function ()
     local front = hs.application.frontmostApplication()
     if front:name() == 'Alacritty' then
       if prevWin ~= nil then
@@ -40,6 +165,17 @@ do
       hs.application.launchOrFocus('Alacritty')
     end
   end)
+  -- hs.hotkey.bind({'cmd'}, ';', function()
+  --   local front = hs.application.frontmostApplication()
+  --   if front:name() == 'Alacritty' then
+  --     if prevWin ~= nil then
+  --       prevWin:focus()
+  --     end
+  --   else
+  --     prevWin = hs.window.focusedWindow()
+  --     hs.application.launchOrFocus('Alacritty')
+  --   end
+  -- end)
 end
 
 
@@ -159,85 +295,58 @@ do
   end
 
   -- 윈도우창 크기 조절
-  cmd:bind({'cmd'}, 'h', moveToLeft)
-  cmd:bind({'cmd'}, 'l', moveToRight)
-  cmd:bind({'cmd'}, 'k', moveToTop)
-  cmd:bind({'cmd'}, 'j', moveToBottom)
-  cmd:bind({'cmd'}, 'm', maxWindow)
-  cmd:bind({'ctrl', 'cmd'}, 'h', moveToLeftForScreenshot)
-  cmd:bind({'ctrl', 'cmd'}, 'l', moveToRightForScreenshot)
+  layer04:bind('h', moveToLeft)
+  layer04:bind('l', moveToRight)
+  layer04:bind('k', moveToTop)
+  layer04:bind('j', moveToBottom)
+  layer04:bind('m', maxWindow)
+  layer04:bind('u', moveToLeftForScreenshot)
+  layer04:bind('i', moveToRightForScreenshot)
 end
-
-
--- do -- 현제 입력소스 확인
---   hs.hotkey.bind({'ctrl', 'option', 'cmd'}, 'i', function()
---     local input_source = hs.keycodes.currentSourceID()
---     print(input_source)
---   end)
--- end
 
 
 -- Custom Key
 --
 do
   -- toggle capslock
-  custom:bind({'ctrl'}, 'a', function ()
-    hs.hid.capslock.toggle()
-    return true
-  end)
+  layer04:bind('a', hs.hid.capslock.toggle)
 
   -- copy
-  custom:bind({'ctrl'}, 'y', function (evt)
+  layer04:bind('y', function (evt)
     hs.eventtap.keyStroke({'cmd'}, 'c')
-    return true
   end)
 
   -- paste
-  custom:bind({'ctrl'}, 'p', function (evt)
+  layer04:bind('p', function (evt)
     hs.eventtap.keyStroke({'cmd'}, 'v')
-    return true
   end)
 
-  -- right tap
-  custom:bind({'ctrl'}, 'k', function (evt)
-    hs.eventtap.keyStroke({'alt', 'cmd'}, 'right')
-    return true
-  end)
-
-  -- left tap
-  custom:bind({'ctrl'}, 'j', function (evt)
-    hs.eventtap.keyStroke({'alt', 'cmd'}, 'left')
-    return true
-  end)
-
-  -- full size
-  custom:bind({'ctrl'}, 'm', function (evt)
-    hs.eventtap.keyStroke({'ctrl', 'cmd'}, 'f')
-    return true
-  end)
-
-  -- left swap
-  -- custom:bind({'ctrl'}, 'h', function (evt)
-  --   -- evt:keyStroke({'ctrl'}, 'left')
-  --   print('hello')
-  --   hs.eventtap.keyStroke({'ctrl'}, 'left')
-  --   return false
+  -- -- right tap
+  -- layer04:bind('k', function (evt)
+  --   hs.eventtap.keyStroke({'alt', 'cmd'}, 'right')
   -- end)
 
+  -- -- left tap
+  -- layer04:bind('j', function (evt)
+  --   hs.eventtap.keyStroke({'alt', 'cmd'}, 'left')
+  -- end)
+
+  -- full size
+  layer04:bind('f', function (evt)
+    hs.eventtap.keyStroke({'ctrl', 'cmd'}, 'f')
+  end)
 
   -- Keyboard-driven expose
   --
   -- default windowfilter
   local expose = hs.expose.new(nil, {showThumbnail=true})
-  custom:bind({'ctrl'}, ';', function (evt)
+  layer04:bind('space', function (evt)
     expose:toggleShow()
-    return true
   end)
   -- Active application
   local expose_app = hs.expose.new(nil, {onlyActiveApplication=true})
-  custom:bind({'ctrl', 'shift'}, ';', function ()
+  layer04:bind(',', function ()
     expose_app:toggleShow()
-    return true
   end)
 
 
@@ -287,14 +396,12 @@ do
     v:show()
   end
 
-  custom:bind({'ctrl'}, 'd', function ()
+  layer04:bind('d', function ()
     toggleCheatsheet("./assets/keyboard-layers.png")
-    return true
   end)
 
-  custom:bind({'ctrl'}, 's', function ()
+  layer04:bind('v', function ()
     toggleCheatsheet("./assets/vim-cheatsheet.png")
-    return true
   end)
 end
 
@@ -312,26 +419,40 @@ do
     end
   end
 
-  local function new_remapper()
+  local function newRemapper()
+    local remapper = FRemap.new()
+    remapper:remap('capslock', 'escape')
+    return remapper
+  end
+
+  local function newRemapperLayer()
     local remapper = FRemap.new()
     remapper:remap('capslock', 'rctl')
+    remapper:remap('return', 'rcmd')
     return remapper
   end
 
   local function layoutDefault() -- Remapping Default Layout
     unregisterLayout()
-    local remapper = new_remapper()
+  end
+
+  local function layoutApple() -- Remapping Keyboard Layout: Apple Keyboard
+    unregisterLayout()
+    local remapper = newRemapper()
     remapper:register()
     current_map = remapper
   end
 
-  local function layoutApple() -- Remapping Keyboard Layout: Apple
-    layoutDefault()
+  local function layoutAppleLayer() -- Remapping Keyboard Layout: Apple Keyboard (Layer Version)
+    unregisterLayout()
+    local remapper = newRemapperLayer()
+    remapper:register()
+    current_map = remapper
   end
 
-  local function layoutWindows() -- Remapping Keyboard Layout: WindowsKeys 
+  local function layoutWindows() -- Remapping Keyboard Layout: Windows Keyboard
     unregisterLayout()
-    local remapper = new_remapper()
+    local remapper = newRemapper()
     remapper:remap('lcmd', 'lalt')
     remapper:remap('lalt', 'lcmd')
     remapper:remap('rctl', 'ralt')
@@ -339,9 +460,19 @@ do
     current_map = remapper
   end
 
-  local function layout68Keys() -- Remapping Keyboard Layout: 68Keys
+  local function layoutWindowsLayer() -- Remapping Keyboard Layout: Windows Keyboard (Layer Version)
     unregisterLayout()
-    local remapper = new_remapper()
+    local remapper = newRemapperLayer()
+    remapper:remap('lcmd', 'lalt')
+    remapper:remap('lalt', 'lcmd')
+    remapper:remap('rctl', 'ralt')
+    remapper:register()
+    current_map = remapper
+  end
+
+  local function layout68Keys() -- Remapping Keyboard Layout: 68Keys Keyboard
+    unregisterLayout()
+    local remapper = newRemapper()
     remapper:remap('escape', '`')
     remapper:remap('lcmd', 'lalt')
     remapper:remap('lalt', 'lcmd')
@@ -350,17 +481,33 @@ do
     current_map = remapper
   end
 
-  local function layoutAlice80() -- Remapping Keyboard Layout: Alice80
+  local function layout68KeysLayer() -- Remapping Keyboard Layout: 68Keys Keyboard (Layer Version)
     unregisterLayout()
-    local remapper = new_remapper()
+    local remapper = newRemapperLayer()
     remapper:remap('escape', '`')
-    remapper:remap('rctl', 'f15')
+    remapper:remap('lcmd', 'lalt')
+    remapper:remap('lalt', 'lcmd')
+    remapper:remap('rctl', 'ralt')
     remapper:register()
     current_map = remapper
-    -- tmux key
-    hs.hotkey.bind({}, 'f15', function()
-      hs.eventtap.keyStroke({'ctrl'}, 'b')
-    end)
+  end
+
+  local function layoutAlice80() -- Remapping Keyboard Layout: Alice80 Keyboard
+    unregisterLayout()
+    local remapper = newRemapper()
+    remapper:remap('escape', '`')
+    remapper:remap('rctl', 'ralt')
+    remapper:register()
+    current_map = remapper
+  end
+
+  local function layoutAlice80Layer() -- Remapping Keyboard Layout: Alice80 Keyboard (Layer Version)
+    unregisterLayout()
+    local remapper = newRemapperLayer()
+    remapper:remap('escape', '`')
+    remapper:remap('rctl', 'ralt')
+    remapper:register()
+    current_map = remapper
   end
 
   local chooser = hs.chooser.new(function(choice)
@@ -369,17 +516,30 @@ do
     end
     if choice.text == 'Keyboard Layout: Default' then
       layoutDefault()
-    elseif choice.text == 'Keyboard Layout: Apple' then
+      hs.alert.show(choice.text)
+    elseif choice.text == 'Keyboard Layout: Apple Keyboard' then
       layoutApple()
       hs.alert.show(choice.text)
-    elseif choice.text == 'Keyboard Layout: Windows' then
+    elseif choice.text == 'Keyboard Layout: Apple Keyboard (Layer Version)' then
+      layoutAppleLayer()
+      hs.alert.show(choice.text)
+    elseif choice.text == 'Keyboard Layout: Windows Keyboard' then
       layoutWindows()
       hs.alert.show(choice.text)
-    elseif choice.text == 'Keyboard Layout: 68Keys' then
+    elseif choice.text == 'Keyboard Layout: Windows Keyboard (Layer Version)' then
+      layoutWindowsLayer()
+      hs.alert.show(choice.text)
+    elseif choice.text == 'Keyboard Layout: 68Keys Keyboard' then
       layout68Keys()
       hs.alert.show(choice.text)
-    elseif choice.text == 'Keyboard Layout: Alice80' then
+    elseif choice.text == 'Keyboard Layout: 68Keys Keyboard (Layer Version)' then
+      layout68KeysLayer()
+      hs.alert.show(choice.text)
+    elseif choice.text == 'Keyboard Layout: Alice80 Keyboard' then
       layoutAlice80()
+      hs.alert.show(choice.text)
+    elseif choice.text == 'Keyboard Layout: Alice80 Keyboard (Layer Version)' then
+      layoutAlice80Layer()
       hs.alert.show(choice.text)
     else
       hs.alert.show('I don\'t know about "' + choice.text + '"')
@@ -394,77 +554,43 @@ do
       subText = 'Default Keyboard Layout'
     })
     table.insert(list, {
-      text = 'Keyboard Layout: Apple',
+      text = 'Keyboard Layout: Apple Keyboard',
       subText = 'Apple Keyboard Layout'
     })
     table.insert(list, {
-      text = 'Keyboard Layout: Windows',
+      text = 'Keyboard Layout: Apple Keyboard (Layer Version)',
+      subText = 'Apple Keyboard Layout (Layer Version)'
+    })
+    table.insert(list, {
+      text = 'Keyboard Layout: Windows Keyboard',
       subText = 'Windows Keyboard Layout'
     })
     table.insert(list, {
-      text = 'Keyboard Layout: 68Keys',
+      text = 'Keyboard Layout: Windows Keyboard (Layer Version)',
+      subText = 'Windows Keyboard Layout (Layer Version)'
+    })
+    table.insert(list, {
+      text = 'Keyboard Layout: 68Keys Keyboard',
       subText = '68 Keys Keyboard Layout'
     })
     table.insert(list, {
-      text = 'Keyboard Layout: Alice80',
+      text = 'Keyboard Layout: 68Keys Keyboard (Layer Version)',
+      subText = '68 Keys Keyboard Layout (Layer Version)'
+    })
+    table.insert(list, {
+      text = 'Keyboard Layout: Alice80 Keyboard',
       subText = 'Alice80 Keyboard Layout'
+    })
+    table.insert(list, {
+      text = 'Keyboard Layout: Alice80 Keyboard (Layer Version)',
+      subText = 'Alice80 Keyboard Layout (Layer Version)'
     })
     chooser:choices(list)
     chooser:show()
   end
-
-  cmd:bind({}, 'o', openLayoutChooser)
-  layoutWindows() -- default keyboard layout
-end
-
-
-
--- Get Colors --
---
-do
-  local function getColors()
-    local colors = ''
-    for key, value in pairs(hs.drawing.color.lists()['Apple']) do
-      colors = colors .. ' ' .. key
-    end
-    hs.alert.show(colors)
-  end
-
-  cmd:bind({}, 'd', getColors)
-end
-
-
-
--- Swap Desktop --
---
-do
-  -- Left Swap
-  local function leftSwap()
-    local ids = hs.spaces.spacesForScreen()
-    local focus = hs.spaces.focusedSpace()
-    local pre = nil
-    for i = 1, #ids do
-      if ids[i] == focus and pre then
-        hs.spaces.gotoSpace(pre)
-      end
-      pre = ids[i]
-    end
-    return true
-  end
-
-  -- Right Swap
-  local function rightSwap()
-    local ids = hs.spaces.spacesForScreen() local focus = hs.spaces.focusedSpace()
-    for i = 1, #ids do
-      if ids[i] == focus and i + 1 <= #ids then
-        hs.spaces.gotoSpace(ids[i + 1])
-      end
-    end
-    return true
-  end
-
-  custom:bind({'ctrl'}, 'h', leftSwap)
-  custom:bind({'ctrl'}, 'l', rightSwap)
+  --
+  layer04:bind('o', openLayoutChooser)
+  layoutWindowsLayer() -- default keyboard layout
 end
 
 
@@ -473,7 +599,7 @@ end
 --
 do
   hs.hints.hintChars = {'A', 'S', 'D', 'F', 'Q', 'W', 'E', 'R'}
-  cmd:bind({}, 'w', function()
+  layer04:bind('w', function()
     hs.hints.windowHints()
   end)
   hs.hotkey.bind({'shift'}, 'tab', hs.hints.windowHints)
@@ -495,7 +621,7 @@ do
   naver:windowStyle('resizable')
   naver:allowTextEntry(true)
 
-  cmd:bind({}, 'n', function ()
+  layer04:bind('n', function ()
     print(hs.webview.windowMasks)
     if naver:isVisible() then
       naver:hide()
@@ -515,64 +641,19 @@ do
 end
 
 
-local vimMod = Commander.new('Red')
-
--- Vim Mode --
+-- key info
 --
 do
-  cmd:bind({}, 'h', function (evt)
-    evt:keyStroke({}, 'left')
-    vimMod:enable()
-    return true
+  local keyInfoEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
+    local code = evt:getKeyCode()
+    local key = hs.keycodes.map[code]
+    hs.alert.show(key)
   end)
-
-  cmd:bind({}, 'j', function (evt)
-    evt:keyStroke({}, 'down')
-    vimMod:enable()
-    return true
-  end)
-
-  cmd:bind({}, 'k', function (evt)
-    evt:keyStroke({}, 'up')
-    vimMod:enable()
-    return true
-  end)
-
-  cmd:bind({}, 'l', function (evt)
-    evt:keyStroke({}, 'right')
-    vimMod:enable()
-    return true
-  end)
-
-  vimMod:bind({}, 'h', function (evt)
-    evt:keyStroke({}, 'left')
-    return true
-  end)
-
-  vimMod:bind({}, 'j', function (evt)
-    evt:keyStroke({}, 'down')
-    return true
-  end)
-
-  vimMod:bind({}, 'k', function (evt)
-    evt:keyStroke({}, 'up')
-    return true
-  end)
-
-  vimMod:bind({}, 'l', function (evt)
-    evt:keyStroke({}, 'right')
-    return true
-  end)
-
-  vimMod:bind({}, 'i', function ()
-    return false
+  layer04:bind('/', function ()
+    if keyInfoEvt:isEnabled() then
+      keyInfoEvt:stop()
+    else
+      keyInfoEvt:start()
+    end
   end)
 end
-
-
-trigger.bind(';', ';', function()
-  cmd:enable()
-end)
-
-
-trigger.bind(';', 's', snippet)

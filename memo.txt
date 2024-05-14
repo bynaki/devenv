@@ -1,0 +1,8 @@
+2024-04-27 17:53:13: key: 	ctrl	code: 	59
+2024-04-27 17:53:14: key: 	alt	code: 	58
+2024-04-27 17:53:15: key: 	cmd	code: 	55
+2024-04-27 17:53:17: key: 	shift	code: 	56
+2024-04-27 17:53:30: key: 	rightalt	code: 	61
+2024-04-27 17:53:32: key: 	rightcmd	code: 	54
+2024-04-27 17:53:35: key: 	rightalt	code: 	61
+2024-04-27 17:53:37: key: 	rightshift	code: 	60
