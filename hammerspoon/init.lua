@@ -129,6 +129,7 @@ layer04:bind('b', function ()
 end)
 FlickFlag.bind('cmd', layer04)
 
+-- for tmux --
 FlickFlag.bind('ctrl', nil, function()
   hs.eventtap.keyStroke({'ctrl'}, 'b')
 end)
@@ -154,7 +155,7 @@ end
 --
 local prevWin = nil
 do
-  layer04:bind(';', function ()
+  function focusTerminal()
     local front = hs.application.frontmostApplication()
     if front:name() == 'Alacritty' then
       if prevWin ~= nil then
@@ -164,18 +165,10 @@ do
       prevWin = hs.window.focusedWindow()
       hs.application.launchOrFocus('Alacritty')
     end
-  end)
-  -- hs.hotkey.bind({'cmd'}, ';', function()
-  --   local front = hs.application.frontmostApplication()
-  --   if front:name() == 'Alacritty' then
-  --     if prevWin ~= nil then
-  --       prevWin:focus()
-  --     end
-  --   else
-  --     prevWin = hs.window.focusedWindow()
-  --     hs.application.launchOrFocus('Alacritty')
-  --   end
-  -- end)
+  end
+
+  layer04:bind(';', focusTerminal)
+  hs.hotkey.bind({'cmd'}, ';', focusTerminal)
 end
 
 
@@ -396,12 +389,19 @@ do
     v:show()
   end
 
+  -- cheatsheet keyboard layer --
   layer04:bind('d', function ()
     toggleCheatsheet("./assets/keyboard-layers.png")
   end)
 
+  -- cheatsheet vim map --
   layer04:bind('v', function ()
     toggleCheatsheet("./assets/vim-cheatsheet.png")
+  end)
+
+  -- cheatsheet tmux --
+  layer04:bind('x', function ()
+    toggleCheatsheet("./assets/tmux-cheatsheet.png")
   end)
 end
 
