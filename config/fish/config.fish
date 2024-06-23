@@ -25,6 +25,11 @@ if status --is-login
       source $DEVENV/config/fish/config-windows.fish
   end
 
+# setting for secret
+  if test -f $DEVENV/config/fish/config-secret.fish
+    source $DEVENV/config/fish/config-secret.fish
+  end
+
   command -qv nvim && alias vim nvim
   alias tmux "tmux -2"
 
