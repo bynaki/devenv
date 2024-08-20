@@ -1,4 +1,3 @@
-
 local alt = 'alt'
 local cmd = 'cmd'
 local ctrl = 'ctrl'
@@ -168,17 +167,17 @@ local function startKeyEvent(actFlag, actLayer)
     activatedLayer = actLayer
   end
   withKey = nil
-  _KeyEvt:start()
+  KeyEvt:start()
 end
 
 local function stopKeyEvent()
   activatedFlag = nil
   activatedLayer = nil
   withKey = false
-  _KeyEvt:stop()
+  KeyEvt:stop()
 end
 
-_FlagsEvt = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function (evt)
+local flagsEvt = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function (evt)
   local code = evt:getKeyCode()
   local key = hs.keycodes.map[code]
   local flags = evt:getFlags()
@@ -295,7 +294,7 @@ _FlagsEvt = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function (ev
     end
   end
 end)
-_FlagsEvt:start()
+flagsEvt:start()
 
 
 _ObserveEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
@@ -309,7 +308,7 @@ _PreparedEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
 end)
 
 
-_KeyEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
+local keyEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   local code = evt:getKeyCode()
   local key = hs.keycodes.map[code]
   local flags = evt:getFlags()
