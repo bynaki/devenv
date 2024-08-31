@@ -301,7 +301,7 @@ do
 
   -- cheatsheet keyboard layer
   layer01:bind('e', function()
-    toggleCheatsheet("./assets/keyboard-layers.png")
+    toggleCheatsheet("./assets/keyboard-layout.png")
   end)
 
   -- cheatsheet vim map
