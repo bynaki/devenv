@@ -1,3 +1,5 @@
+-- Init Hammerspoon
+
 local ly = require('layout')
 local KeyLayer = ly.KeyLayer
 local Layout = ly.Layout
