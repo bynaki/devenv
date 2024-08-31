@@ -4,35 +4,55 @@ local Layout = ly.Layout
 
 
 
--- Customize Esc Key & Custom Key
--- Esc키 눌렀을때 강제로 영문키로 변경, Capslock off for vim
---
-local input_eng = 'com.apple.ekylayout.ABC'
-local function escapeWithChangedInput()
-  local input_source = hs.keycodes.currentSourceID()
-  if not (input_source == input_eng) then
-    hs.keycodes.currentSourceID(input_eng)
-  end
-  hs.hid.capslock.set(false)
-  hs.eventtap.keyStroke({},'escape')
-end
-
--- Change Input Source :: 한영키 지정
---
 local inputSource = {
   english = 'com.apple.keylayout.ABC',
   korean  = 'com.apple.inputmethod.Korean.2SetKorean',
 }
-local function changeInput()
-  local current = hs.keycodes.currentSourceID()
-  local nextInput = nil
-  if current == inputSource.english then
-    nextInput = inputSource.korean
-  else
-    nextInput = inputSource.english
+-- Customize Esc Key & Custom Key
+-- Esc키 눌렀을때 강제로 영문키로 변경, Capslock off for vim
+--
+-- local function escapeWithChangedInput()
+--   local input_source = hs.keycodes.currentSourceID()
+--   if not (input_source == inputSource.english) then
+--     hs.keycodes.currentSourceID(inputSource.english)
+--   end
+--   hs.hid.capslock.set(false)
+--   hs.eventtap.keyStroke({},'escape')
+-- end
+
+-- Change Input Source :: 한영키 지정
+--
+-- local function changeInput()
+--   local current = hs.keycodes.currentSourceID()
+--   local nextInput = nil
+--   if current == inputSource.english then
+--     nextInput = inputSource.korean
+--   else
+--     nextInput = inputSource.english
+--   end
+--   hs.keycodes.currentSourceID(nextInput)
+-- end
+
+-- 영어키로& Capslock off for vim
+--
+local function changeEngInput()
+  local input_source = hs.keycodes.currentSourceID()
+  if not (input_source == inputSource.english) then
+    hs.keycodes.currentSourceID(inputSource.english)
   end
-  hs.keycodes.currentSourceID(nextInput)
+  hs.hid.capslock.set(false)
 end
+
+KeyDownEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
+  local raw = evt:rawFlags()
+  local code = evt:getKeyCode()
+  local key = hs.keycodes.map[code]
+  if key == 'escape' then
+    changeEngInput()
+  end
+end)
+KeyDownEvt:start()
+
 
 local layer01 = KeyLayer.new()
 
