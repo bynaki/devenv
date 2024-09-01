@@ -13,8 +13,12 @@
 
 4. [Configure Tmux](https://github.com/bynaki/docs/blob/main/development-environment/configure-tmux.md)
 
-5. [Configure Neovim](https://github.com/bynaki/docs/blob/main/development-environment/configure-neovim.md)
+5. [Install LazyVim](https://github.com/bynaki/docs/blob/main/development-environment/install-lazyvim.md)
 
 6. [Install Docker on ArchLinux](https://github.com/bynaki/docs/blob/main/development-environment/install-docker-on-archlinux.md)
 
-6. [Install Python with Anaconda](https://github.com/bynaki/docs/blob/main/development-environment/install-python-anaconda.md)
+7. [Install Docker on Ubuntu](https://github.com/bynaki/docs/blob/main/development-environment/install-docker-on-ubuntu.md)
+
+8. [Install Node.js](https://github.com/bynaki/docs/blob/main/development-environment/install-nodejs.md)
+
+9. [Install Python with Anaconda](https://github.com/bynaki/docs/blob/main/development-environment/install-python-anaconda.md)
