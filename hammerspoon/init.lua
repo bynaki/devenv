@@ -45,6 +45,7 @@ local function changeEngInput()
   hs.hid.capslock.set(false)
 end
 
+ShowKey = false
 KeyDownEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   local raw = evt:rawFlags()
   local code = evt:getKeyCode()
@@ -52,11 +53,22 @@ KeyDownEvt = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function (evt)
   if key == 'escape' then
     changeEngInput()
   end
+  if ShowKey then
+    hs.alert.show(key)
+  end
 end)
 KeyDownEvt:start()
 
 
 local layer01 = KeyLayer.new()
+
+-- Show Key --
+--
+do
+  layer01:bind('s', function ()
+    ShowKey = not ShowKey
+  end)
+end
 
 -- Reload Hammerspoon --
 --
@@ -89,7 +101,34 @@ do
   end
 
   layer01:bind("'", focusTerminal)
-  hs.hotkey.bind({'cmd'}, ';', focusTerminal)
+  hs.hotkey.bind({'cmd'}, "'", focusTerminal)
+end
+
+do
+  local function focusWindowWest()
+    local focused = hs.window.focusedWindow()
+    focused:focusWindowWest()
+  end
+
+  local function focusWindowEast()
+    local focused = hs.window.focusedWindow()
+    focused:focusWindowEast()
+  end
+
+  local function focusWindowNorth()
+    local focused = hs.window.focusedWindow()
+    focused:focusWindowNorth()
+  end
+
+  local function focusWindowSouth()
+    local focused = hs.window.focusedWindow()
+    focused:focusWindowSouth()
+  end
+
+  layer01:bind('h', focusWindowWest)
+  layer01:bind('l', focusWindowEast)
+  layer01:bind('k', focusWindowNorth)
+  layer01:bind('j', focusWindowSouth)
 end
 
 
@@ -209,13 +248,13 @@ do
   end
 
   -- 윈도우창 크기 조절
-  layer01:bind('h', moveToLeft)
-  layer01:bind('l', moveToRight)
-  layer01:bind('k', moveToTop)
-  layer01:bind('j', moveToBottom)
+  layer01:bind('left', moveToLeft)
+  layer01:bind('right', moveToRight)
+  layer01:bind('up', moveToTop)
+  layer01:bind('down', moveToBottom)
   layer01:bind('m', maxWindow)
-  layer01:bind('u', moveToLeftForScreenshot)
-  layer01:bind('i', moveToRightForScreenshot)
+  layer01:bind('pagedown', moveToLeftForScreenshot)
+  layer01:bind('pageup', moveToRightForScreenshot)
 end
 
 
