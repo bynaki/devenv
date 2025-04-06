@@ -1,26 +1,29 @@
 {
-    "name": "naki-theme",
-    "displayName": "naki-theme",
-    "description": "",
-    "version": "0.0.2",
-    "engines": {
-        "vscode": "^1.66.0"
-    },
-    "categories": [
-        "Themes"
-    ],
-    "contributes": {
-        "themes": [
-            {
-                "label": "naki :: Rouge",
-                "uiTheme": "vs-dark",
-                "path": "./themes/rouge-theme.json"
-            },
-            {
-                "label": "naki :: Winter Is Comming",
-                "uiTheme": "vs-dark",
-                "path": "./WinterIsComing-dark-blue-color-no-italics-theme.json"
-            }
-        ]
-    }
+	"name": "naki-theme",
+	"displayName": "naki-theme",
+	"description": "",
+	"version": "0.0.2",
+	"engines": {
+		"vscode": "^1.66.0"
+	},
+	"categories": [
+		"Themes"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"label": "naki :: Rouge",
+				"uiTheme": "vs-dark",
+				"path": "./themes/rouge-theme.json"
+			},
+			{
+				"label": "naki :: Winter Is Comming",
+				"uiTheme": "vs-dark",
+				"path": "./themes/WinterIsComing-dark-blue-color-no-italics-theme.json"
+			}
+		]
+	},
+	"__metadata": {
+		"size": 62591
+	}
 }
