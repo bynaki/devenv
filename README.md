@@ -22,3 +22,15 @@
 8. [Install Node.js](https://github.com/bynaki/docs/blob/main/development-environment/install-nodejs.md)
 
 9. [Install Python with Anaconda](https://github.com/bynaki/docs/blob/main/development-environment/install-python-anaconda.md)
+
+## Add Lazy Vim Submodule 
+
+```shell
+git submodule add https://github.com/LazyVim/starter lazy.vim
+```
+
+### Update Submodules
+
+```shell
+git submodule update --remote --merge
+```
