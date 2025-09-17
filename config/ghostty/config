@@ -1,0 +1,13 @@
+# ghostty config
+
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #ADB9A4
+background = #011627
+background-opacity = 0.7
+background-blur = true
+font-size = 24
+font-family = "SauceCodePro Nerd Font Mono"
+# macOS에서 폰트 굵기 강화
+font-thicken = true
+font-thicken-strength = 100
