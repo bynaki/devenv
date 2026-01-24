@@ -6,6 +6,7 @@
     - [Essential Development Environment on macOS](https://github.com/bynaki/docs/blob/main/development-environment/essential-development-environment-on-macos.md)
     - [Essential Development Environment on Arch Linux in Docker (Mac Sillicon)](https://github.com/bynaki/docs/blob/main/development-environment/essential-development-environment-on-archlinux-in-docker-mac-sillicon.md)
     - [Essential Development Environment on Arch Linux](https://github.com/bynaki/docs/blob/main/development-environment/essential-development-environment-on-archlinux.md)
+    - [Essential Development Environment on Ubuntu](https://github.com/bynaki/docs/blob/main/development-environment/essential-development-environment-on-ubuntu.md)
 
 2. [Fish Shell](https://github.com/bynaki/docs/blob/main/development-environment/fish-shell.md)
 
@@ -22,3 +23,4 @@
 8. [Install Node.js](https://github.com/bynaki/docs/blob/main/development-environment/install-nodejs.md)
 
 9. [Install Python with Anaconda](https://github.com/bynaki/docs/blob/main/development-environment/install-python-anaconda.md)
+10. [Install Zsh](https://github.com/bynaki/docs/blob/main/development-environment/install-zsh.md)
