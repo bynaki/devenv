@@ -1,0 +1,6 @@
+[general]
+import = [
+"~/devenv/config/alacritty/font.toml",
+"~/devenv/config/alacritty/env.toml",
+"~/devenv/config/alacritty/themes/nord.toml"
+]

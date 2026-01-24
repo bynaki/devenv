@@ -1,0 +1,42 @@
+[colors.primary]
+background = '#172030'
+foreground = '#d8dee9'
+dim_foreground = '#a5abb6'
+
+[colors]
+cursor = { text = '#ffffff', cursor = '#c5107a' }
+vi_mode_cursor = { text = "CellBackground", cursor = "CellForeground" }
+selection = { text = "CellForeground", background = '#4c566a' }
+
+[colors.search]
+matches = { foreground = "CellBackground", background = '#88c0d0' }
+
+[colors.normal]
+black    = '#3b4252' #0
+red      = '#bf616a' #1
+green    = '#a3be8c' #2
+yellow   = '#ebcb8b' #3
+blue     = '#81a1c1' #4
+magenta  = '#b48ead' #5
+cyan     = '#88c0d0' #6
+white    = '#e5e9f0' #7
+
+[colors.bright]
+black   = '#4c566a' #8
+red     = '#bf616a' #9
+green   = '#a3be8c' #10
+yellow  = '#ebcb8b' #11
+blue    = '#81a1c1' #12
+magenta = '#b48ead' #13
+cyan    = '#8fbcbb' #14
+white   = '#eceff4' #15
+
+[colors.dim]
+black   = '#373e4d'
+red     = '#94545d'
+green   = '#809575'
+yellow  = '#b29e75'
+blue    = '#68809a'
+magenta = '#8c738c'
+cyan    = '#6d96a5'
+white   = '#aeb3bb'
