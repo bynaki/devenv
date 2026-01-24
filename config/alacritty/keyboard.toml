@@ -1,0 +1,4 @@
+[keyboard]
+bindings = [
+{ key = "Space", mods = "Shift|Command", mode = "~Search", action = "ToggleViMode" }
+]
