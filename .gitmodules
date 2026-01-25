@@ -1,3 +1,0 @@
-[submodule "lazy.vim"]
-	path = lazy.vim
-	url = https://github.com/LazyVim/starter
