@@ -128,6 +128,11 @@ export XDG_STATE_HOME="$HOME/.local/state"
 # devenv project path
 export DEVENV="$HOME/devenv"
 
+# config terminal theme
+# export TERMINAL_THEME="dark"
+# or
+# export TERMINAL_THEME="light"
+
 alias tmux="tmux -2"
 alias vim="nvim"
 neofetch
