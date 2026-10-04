@@ -27,3 +27,21 @@ Python 패키지·프로젝트 매니저. `https://docs.astral.sh/uv/` 참고.
 ### herdr 설치
 
 - [ ] herdr 설치: 코딩 에이전트용 터미널 멀티플렉서. 설치 전에 `https://github.com/herdrdev/herdr`의 README와 `https://herdr.dev/docs/`를 읽고 참고하라.
+
+### Tailscale 설치
+
+메시 VPN. `https://tailscale.com/kb/1031/install-linux` 참고.
+
+- [ ] tailscale 설치
+  - 판정 기준: `tailscale version`이 동작하면 충족.
+  - 설치 방법(공식 `install.sh`, 배포판 패키지 저장소, static 바이너리)은 실행 시점에 사용자에게
+    물어 고르게 한다. macOS는 AGENTS.md 지침에 따라 `brew`를 쓴다.
+- [ ] 계정 로그인
+  - 판정 기준: `tailscale status`가 로그인된 상태로 자기 노드를 보여주면 충족.
+  - **로그인은 사용자가 직접 한다.** `sudo tailscale up`이 출력하는 인증 URL을 사용자가
+    브라우저에서 열어 승인하게 하고, 에이전트는 로그인됐는지만 확인한다.
+  - 인증키(`--auth-key`)를 에이전트에게 넘기지 않는다. 키는 비밀값이다.
+- [ ] GUI 없는 머신이면 재부팅 후에도 자동으로 서비스되게 설정
+  - GUI 여부는 `DISPLAY`/`WAYLAND_DISPLAY`와 설치된 세션 목록(`/usr/share/xsessions`)으로 판단한다.
+  - 판정 기준: `systemctl is-enabled tailscaled`가 `enabled`, `is-active`가 `active`면 충족.
+  - systemd가 없는 환경(일부 컨테이너 등)이면 강행하지 말고 그 사실과 대안을 보고한 뒤 물어본다.
