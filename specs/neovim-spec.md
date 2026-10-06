@@ -133,3 +133,11 @@ mason이 `servers` 테이블의 항목을 자동 설치하므로 별도 설치 �
   - 키맵은 취향이므로 `<your keymap>`을 사용자에게 물어본다.
   - 판정 기준: 파이썬 파일에서 `:VenvSelect`가 존재하고, 고른 가상환경의 python이
     LSP 설정에 반영되면 충족.
+
+### nvim에서 gitignore된 파일까지 찾기
+
+- [ ] Telescope에 `.gitignore`된 파일과 숨김 파일까지 찾는 `<leader>sF` 키맵 추가
+  - 판정 기준: `nvim --headless +'lua print(vim.fn.maparg("<leader>sF", "n") ~= "" and "ok" or "missing")' +qa`가 `ok`를 출력하면 충족.
+  - 기존 `<leader>sf`(일반 검색)는 그대로 두고 그 아래에 추가한다.
+  - `find_files`의 `find_command`로 `rg --files --hidden --no-ignore --glob '!.git/'`을 쓴다. `.git/` 내부는 제외한다.
+
